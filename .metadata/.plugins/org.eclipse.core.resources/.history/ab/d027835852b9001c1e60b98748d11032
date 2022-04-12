@@ -1,0 +1,29 @@
+package com.kh.cafe;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+public class Select {
+	public static void main(String[] args) {
+		String url = "jdbc:oracle:thin:@localhost";
+		String username = "kh";
+		String password = "kh";
+		
+		try (Connection con = DriverManager.getConnection(url, username, password);
+			Statement stmt = con.createStatement();){
+			
+			System.out.println("success");
+			// 1번 메뉴의 이름을 '바닐라라떼', 사격을 4500원으로 변경
+			
+			String sql = "select * from cafe where product_id = 1";
+			
+			// executeQuery() 를 통해 반환하는 결과 -> ResultSet(질의 결과)
+			ResultSet rs = stmt.executeQuery(sql);
+			System.out.println(rs);// ResultSet의 주소값 반환
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

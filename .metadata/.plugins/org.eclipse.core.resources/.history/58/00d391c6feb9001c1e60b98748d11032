@@ -1,0 +1,7 @@
+package com.kh.cafe;
+
+public class SQLInjection {
+	public static void main(String[] args) {
+		
+	}
+}

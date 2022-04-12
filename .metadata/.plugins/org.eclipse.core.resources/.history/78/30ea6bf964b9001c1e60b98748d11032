@@ -1,0 +1,16 @@
+package com.kh.std;
+
+public class StudentDAO {
+
+	public static void main(String[] args) {
+		private String url = "jdbc:oracle:thin:@localhost";
+		private String 
+		
+		
+		
+		public int insert() {
+			
+		}
+	}
+
+}

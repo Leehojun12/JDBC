@@ -1,0 +1,61 @@
+package com.kh.cafe;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+public class CafeDAO {
+
+	private String url = "jdbc:oracle:thin:@localhost";
+ 	private String username = "kh";
+	private String password = "kh";
+	
+	public int insert(String name, int price) throws Exception{		
+		try(Connection con = DriverManager.getConnection(url, username, password);
+			Statement stmt = con.createStatement();){
+			
+			String sql = "insert into cafe values(seq_cafe.nextval, '" + name + "'," + price+ ", sysdate)";
+			
+			int rs = stmt.executeUpdate(sql);
+			return rs;
+		}
+	}
+	
+	public int update(String name) throws Exception{		
+		try(Connection con = DriverManager.getConnection(url, username, password);
+				Statement stmt = con.createStatement();){
+			
+				String sql = "update cafe set price = 2000 where product_name = '녹차'";
+				
+				int rs = stmt.executeUpdate(sql);
+				return rs;
+		}
+	}
+	
+	public int delete() throws Exception{		
+		try(Connection con = DriverManager.getConnection(url, username, password);
+				Statement stmt = con.createStatement();){
+			
+				String sql = "delete from cafe where product_name = '녹차'";
+				
+				int rs = stmt.executeUpdate(sql);
+				return rs;
+		}
+	}
+	public String select() throws Exception{		
+		try(Connection con = DriverManager.getConnection(url, username, password);
+			Statement stmt = con.createStatement();){
+			
+			String data = null;
+
+			String sql = "select * from cafe where product_id = 1";
+			
+			ResultSet rs = stmt.executeQuery(sql);
+			if(rs.next()) {
+				data = rs.getInt(1) + " : " + rs.getString(2) + " : " + rs.getInt(3) + " : " + rs.getDate(4);
+			}
+			return data;
+		}
+	}
+}

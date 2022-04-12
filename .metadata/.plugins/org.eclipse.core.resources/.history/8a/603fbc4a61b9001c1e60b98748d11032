@@ -1,0 +1,38 @@
+package com.kh.cafe;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+
+public class CafeDAO {
+
+	public int insert() throws Exception{
+		String url = "jdbc:oracle:thin:@localhost";
+		String username = "kh";
+		String password = "kh";
+		
+		try(Connection con = DriverManager.getConnection(url, username, password);
+			Statement stmt = con.createStatement();){
+			
+			String sql = "insert into cafe values(seq_cafe.nextval, '녹차', 8000, sysdate)";
+			
+			int rs = stmt.executeUpdate(sql);
+			return rs;
+		}
+	}
+	
+	public int update() throws Exception{
+		String url = "jdbc:oracle:thin:@localhost";
+		String username = "kh";
+		String password = "kh";
+		
+		try(Connection con = DriverManager.getConnection(url, username, password);
+				Statement stmt = con.createStatement();){
+			
+				String sql = "update cafe set price = 2000 where product_name = '녹차'";
+				
+				int rs = stmt.executeUpdate(sql);
+				return rs;
+		}
+	}
+}

@@ -1,0 +1,62 @@
+package com.kh.cafe;
+
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+public class CafeDAO {
+
+	private String url = "jdbc:oracle:thin:@localhost";
+ 	private String username = "kh";
+	private String password = "kh";
+	
+	public int insert(CafeDTO dto) throws Exception{		
+		try(Connection con = DriverManager.getConnection(url, username, password);
+			Statement stmt = con.createStatement();){
+			
+			String sql = "insert into cafe values(seq_cafe.nextval, '" + dto.getProduct_name() + "'," + dto.getPrice()+ ", sysdate)";
+			
+			int rs = stmt.executeUpdate(sql);
+			return rs;
+		}
+	}
+	
+	public int update(CafeDTO dto) throws Exception{		
+		try(Connection con = DriverManager.getConnection(url, username, password);
+				Statement stmt = con.createStatement();){
+			
+				String sql = "update cafe set product_name = '"+ dto.getProduct_name() +"',"+"price =" +dto.getPrice() + "where product_id ="+ dto.getProduct_id();
+				
+				int rs = stmt.executeUpdate(sql);
+				return rs;
+		}
+	}
+	
+	public int delete(int id_num) throws Exception{		
+		try(Connection con = DriverManager.getConnection(url, username, password);
+				Statement stmt = con.createStatement();){
+			
+				String sql = "delete from cafe where product_id ="+ id_num;
+				
+				int rs = stmt.executeUpdate(sql);
+				return rs;
+		}
+	}
+	public CafeDTO select(int id_num) throws Exception{		
+		try(Connection con = DriverManager.getConnection(url, username, password);
+			Statement stmt = con.createStatement();){
+			
+			String sql = "select * from cafe where product_id ="+ id_num;
+			ResultSet rs = stmt.executeQuery(sql);
+			if(rs.next()) {
+				int product_id = rs.getInt(1);
+				String product_name = rs.getString(2);
+				int price = rs.getInt(3);
+				Date register_date = rs.getDate(4);
+				CafeDTO dto = new CafeDTO(product_id, product_name, price, register_date);
+			}
+		}
+	}
+}

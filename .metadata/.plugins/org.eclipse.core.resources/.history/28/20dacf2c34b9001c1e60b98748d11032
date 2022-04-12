@@ -1,0 +1,21 @@
+package com.kh.cafe;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class Insert {
+	public static void main(String[] args) {
+		
+		String url = "jdbc:oracle:thin:@localhost";
+		String username = "kh";
+		String password = "kh";
+		
+		//Connection 객체 생성 -> url, username, password
+		
+		try(Connection con = DriverManager.getConnection(url,username, password);){
+			System.out.println("DB접속 성공");
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+}
