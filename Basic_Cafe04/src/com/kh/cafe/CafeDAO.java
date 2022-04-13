@@ -1,6 +1,7 @@
 package com.kh.cafe;
 
 
+
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -15,7 +16,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 public class CafeDAO {
 	
 	// BasicDataSource 클래스 인스턴스 생성 -> DBCP를 만들어주는 클래스
-	BasicDataSource bds = new BasicDataSource();
+	private BasicDataSource bds = new BasicDataSource();
 	
 	// DBCP를 구성하기 위해 필요한 설정값 셋팅
 	public CafeDAO() {

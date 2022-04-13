@@ -6,7 +6,7 @@ public class Run {
 	public static void main(String[] args) {
 
 		Scanner sc = new Scanner(System.in);
-		LoginDAO dao = new LoginDAO();
+		LoginDAO dao = LoginDAO.getInstance();
 		int count = 0;
 
 		while (true) {
@@ -29,6 +29,7 @@ public class Run {
 						LoginDTO rs = dao.select(id, pw);
 						if (rs != null) {
 							System.out.println("로그인 성공");
+							System.out.println(dao.selectNick(id)+ "님 환영합니다!\n 오늘의 날씨는 흐림, 평균온도는 12.5도입니다.");
 							break login;
 						} else {
 							System.out.println("로그인 실패");
@@ -78,7 +79,7 @@ public class Run {
 					LoginDTO dto = new LoginDTO(id, pw, null);
 
 					try {
-						System.out.println(dto.getNickname() + "님 정말 삭제를 하시겠습니까?");
+						System.out.println(dao.selectNick(id) + "님 정말 삭제를 하시겠습니까?");
 						System.out.println("yes\tno");
 						System.out.print(">> ");
 						String anwser = sc.nextLine();
