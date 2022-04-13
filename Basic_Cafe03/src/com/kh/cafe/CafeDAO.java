@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class CafeDAO {
@@ -32,61 +33,81 @@ public class CafeDAO {
 		}
 	}
 	
-	public int update(CafeDTO dto) throws Exception{		
+	public int update(CafeDTO dto) throws Exception{
+		
+		String sql = "update cafe set product_name =?, price =? where product_id = ?";
+		
 		try(Connection con = DriverManager.getConnection(url, username, password);
-				Statement stmt = con.createStatement();){
-			
-				String sql = "update cafe set product_name = '"+ dto.getProduct_name() +"',"+"price =" +dto.getPrice() + "where product_id ="+ dto.getProduct_id();
+				PreparedStatement pstmt = con.prepareStatement(sql);){
 				
-				int rs = stmt.executeUpdate(sql);
+				pstmt.setString(1, dto.getProduct_name());
+				pstmt.setInt(2, dto.getPrice());
+				pstmt.setInt(3, dto.getProduct_id());
+				int rs = pstmt.executeUpdate();
 				return rs;
 		}
 	}
 	
-	public int delete(int id_num) throws Exception{		
+	public int delete(int id_num) throws Exception{
+		
+		String sql = "delete from cafe where product_id = ?";
+		
 		try(Connection con = DriverManager.getConnection(url, username, password);
-				Statement stmt = con.createStatement();){
+			PreparedStatement pstmt = con.prepareStatement(sql);){
 			
-				String sql = "delete from cafe where product_id ="+ id_num;
-				
-				int rs = stmt.executeUpdate(sql);
-				return rs;
+			pstmt.setInt(1, id_num);
+			int rs = pstmt.executeUpdate();
+			return rs;
 		}
 	}
 	public CafeDTO select(int id_num) throws Exception{		
+
+		String sql = "select * from cafe where product_id = ?";
+		
 		try(Connection con = DriverManager.getConnection(url, username, password);
-			Statement stmt = con.createStatement();){
+			PreparedStatement pstmt = con.prepareStatement(sql);){
 			
-			String sql = "select * from cafe where product_id ="+ id_num;
-			ResultSet rs = stmt.executeQuery(sql);
+			pstmt.setInt(1, id_num);
+			ResultSet rs =pstmt.executeQuery();
 			if(rs.next()) {
 				int product_id = rs.getInt(1);
 				String product_name = rs.getString(2);
 				int price = rs.getInt(3);
-				Date register_date = rs.getDate(4);
+				String register_date = parseDate(rs.getDate(4));
 				CafeDTO dto = new CafeDTO(product_id, product_name, price, register_date);
 				return dto;
 			}
 			return null;
 		}
 	}
+	
 	public ArrayList<CafeDTO> selectAll() throws Exception{
+
+		String sql = "select * from cafe";
+	
 		try(Connection con = DriverManager.getConnection(url,username, password);
-			Statement stmt = con.createStatement();){
-			
-			String sql = "select * from cafe";
-			ResultSet rs = stmt.executeQuery(sql);
+			PreparedStatement pstmt = con.prepareStatement(sql);){
+			// 인자값이 셋팅이 필요없는 경우에는 바로 쿼리문으로 실행하면 됨
+			ResultSet rs = pstmt.executeQuery();
 			ArrayList<CafeDTO> list = new ArrayList<>();
 			
 			while(rs.next()) {
 				int product_id = rs.getInt(1);
 				String product_name = rs.getString(2);
 				int price = rs.getInt(3);
-				Date register_date = rs.getDate(4);
+				String register_date = parseDate(rs.getDate(4));
 				
 				list.add(new CafeDTO(product_id, product_name, price, register_date));
 			}
 			return list;
 		}
+	}
+	
+	public String parseDate(Date date) {
+		// 년/월/일 24시:분:초
+		// 자바에서 hh -> default 12시간 기준으로 표기됨
+		// HH -> 24시간 표기
+		SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd HH:mm:ss");
+		return sdf.format(date);
 	}
 }
